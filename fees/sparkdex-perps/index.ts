@@ -55,9 +55,22 @@ const fetch = async (timestamp: number) => {
   const totalFeeUSD = dailyFeeUSD + dailyFundingFeeUSD;
   const finalDailyFee = parseInt(totalFeeUSD.toString()) / 1e18;
 
+  // Revenue calculations
+  // Revenue = total fees
+  const finalDailyRevenue = finalDailyFee;
+  
+  // Protocol revenue = 60% of revenue
+  const finalDailyProtocolRevenue = finalDailyRevenue * 0.6;
+  
+  // Supply side revenue = 40% of revenue
+  const finalDailySupplySideRevenue = finalDailyRevenue * 0.4;
+
   return {
     timestamp: todaysTimestamp,
     dailyFees: finalDailyFee,
+    dailyRevenue: finalDailyRevenue,
+    dailyProtocolRevenue: finalDailyProtocolRevenue,
+    dailySupplySideRevenue: finalDailySupplySideRevenue,
   };
 };
 
@@ -69,7 +82,12 @@ const adapter: Adapter = {
     },
   },
   start: '2024-11-05',
-  methodology: "Fees collected from user trading fees and funding fees on SparkDEX perpetual markets",
+  methodology: {
+    Fees: "Trading fees and funding fees collected from users on SparkDEX perpetual markets",
+    Revenue: "Total revenue equals total fees collected",
+    ProtocolRevenue: "60% of total revenue goes to the protocol",
+    SupplySideRevenue: "40% of total revenue goes to liquidity providers",
+  },
 };
 
 export default adapter;
